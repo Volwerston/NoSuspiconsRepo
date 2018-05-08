@@ -1,0 +1,139 @@
+﻿@model Film.Models.Movie
+@{
+    ViewBag.Title = "Details";
+}
+
+<br />
+<br />
+
+<div class="row">
+    <h2>@Html.DisplayFor(modelItem => Model.Name)</h2>
+    @if (Model.Image != null)
+    {
+        @Html.Raw(String.Format("<img style='width:{0}px;float:left; height:{1}px;' src=\"data:image/png;base64,"
+                                     + Convert.ToBase64String(Model.Image) + "\" />", 200, 300))
+    }
+    @if (Model.Image == null)
+    {
+        <div class="user-photo"></div>
+    }
+    Категорії:
+    @foreach (var c in Model.Categories)
+    {
+        @c.Category.Name<text>,</text>
+    }.
+    <br/>
+          
+    @Html.DisplayFor(modelItem => Model.Description)
+    @{
+        TempData["FilmId"] = Model.Id;
+    }
+    <br />
+    @if (Model.Marks.Count != 0)
+{
+
+    <div>Оцінка : @Math.Round(Model.Marks.Average(a => a.MarkValue),2)</div>
+
+}
+    @if(User.Identity.IsAuthenticated)
+    {    
+         @Html.Partial("PutMark",new Film.Models.Mark())
+    }
+
+</div>
+<br />
+<br />
+
+<ul class="nav nav-tabs">
+    <li>
+        <a class="btn" onclick="openCity('comments')">Коментарі</a>
+    </li>
+<li>
+    <a class="btn" onclick="openCity('rates')">Рейтинг</a>
+</li>
+</ul>
+
+<div id="comments" class="city">
+
+@if(ViewBag.Blocked==true)
+{
+    @Html.Partial("Blocked")
+}
+@if (User.Identity.IsAuthenticated)
+{
+    @Html.Partial("CreateComment", new Film.Models.Comment())
+    
+}
+@if (!User.Identity.IsAuthenticated)
+{
+    @Html.Partial("NotLoggedIn")
+}
+
+<br />
+<br />
+<div class="text-center">Коментарі</div>
+@if (Model.Comments.Count != 0)
+{
+    foreach (var comment in Model.Comments)
+    {
+
+        if (comment.Body.Length < 30)
+        {
+            <div class="row">
+                <div class="well col-md-12 ">
+                    <label>@comment.UserName</label>
+                    <div class="pull-right">
+                        @Html.Label(comment.Date.ToString())
+                        <br />
+                        @if (User.IsInRole("moderator"))
+                        {
+                            @Html.ActionLink("Видалити", "DeleteComment", "Moderator", new { id = comment.Id }, null)
+                        }
+                    </div>
+
+                    <div>@Html.Raw(comment.Body.Replace(Environment.NewLine, "<br/>"))</div>
+                </div>
+            </div>
+        }
+       if (comment.Body.Length > 30)
+        {
+            <div class="row">
+                <div class="well col-md-12">
+                    <label>@comment.UserName</label>
+                    <div class="pull-right">
+                        @Html.Label(comment.Date.ToString())
+                        <br />
+                        @if (User.IsInRole("moderator"))
+                        {
+                            @Html.ActionLink("Видалити", "DeleteComment", "Moderator", new { id = comment.Id }, null)
+                        }
+                    </div>
+
+                    <div>@Html.Raw(comment.Body.Replace(Environment.NewLine, "<br/>"))</div>
+                </div>
+            </div>
+        }
+    <br />
+         
+}
+}
+</div>
+
+<div id="rates" class="city" style="display:none">
+    @foreach(var mark in Model.Marks)
+    {
+        <div>
+        Користувач: <label>@mark.UserName</label>
+        оцінив фільм на <label>@mark.MarkValue</label>
+        </div>
+
+    }
+</div>
+
+            
+
+
+
+   
+    
+
