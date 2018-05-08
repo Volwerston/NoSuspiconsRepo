@@ -64,7 +64,7 @@ namespace Film
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //DbInit.Seed(app);
+            DbInit.Seed(app);
         }
     }
 }

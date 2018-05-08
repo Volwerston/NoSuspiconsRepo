@@ -1,6 +1,7 @@
-﻿@using (Html.BeginForm("Search","Home"))
-{ 
-    <input type="search" placeholder="Назва фільму" name="search" class="form-control"/>
+﻿@using (Html.BeginForm("Search", "Home"))
+{
+    <input type="search" placeholder="Назва фільму" name="search" class="form-control" />
+    <input type="search" placeholder="Режисер" name="director" class="form-control" />
     <input class="btn btn-block btn-default btn-group-md" value="Шукати" type="submit" name="search" style="background: linear-gradient( -90deg, rgb( 0, 238, 118) 0%, rgb( 0, 205, 102) 59.229%, rgb( 0, 139, 69) 100%);
-    border-radius: 20px;"/>
+    border-radius: 20px;" />
 }

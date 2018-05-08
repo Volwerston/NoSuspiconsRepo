@@ -5,5 +5,6 @@ namespace Film.Models
         public string Search{get;set;}
         public bool Rated{get;set;}
         public string Category{get;set;}
+        public string Director { get; set; }
     }
 }

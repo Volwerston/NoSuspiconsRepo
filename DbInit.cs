@@ -18,15 +18,15 @@ namespace Film
             {
                 ApplicationDbContext context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-                
-            context.Database.EnsureCreated();
 
-            if(context.Users.Any())
-            {
-                return;
-            }
+                context.Database.EnsureCreated();
 
-            var roles = new List<IdentityRole>{
+                if (context.Users.Any())
+                {
+                    return;
+                }
+
+                var roles = new List<IdentityRole>{
                 new IdentityRole{
                     Id = Guid.NewGuid().ToString(),
                     Name = "admin",
@@ -44,88 +44,99 @@ namespace Film
                 }
             };
 
-            context.Roles.AddRange(roles);
+                context.Roles.AddRange(roles);
 
-            var admin = new ApplicationUser
-            {
-                Id = Guid.NewGuid().ToString(),
-                Email = "admin@gmail.com",
-                EmailConfirmed = true,
-                Name = "admin",
-                Age = 20,
-                City = "Lviv"
-            };
+                var admin = new ApplicationUser
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Email = "admin@gmail.com",
+                    EmailConfirmed = true,
+                    Name = "admin",
+                    Age = 20,
+                    City = "Lviv"
+                };
 
-            context.Users.Add(admin);
+                context.Users.Add(admin);
 
-            var userRoleAdmin = new IdentityUserRole<string>
-            {
-                UserId = admin.Id,
-                RoleId = roles[0].Id
-            };
+                var userRoleAdmin = new IdentityUserRole<string>
+                {
+                    UserId = admin.Id,
+                    RoleId = roles[0].Id
+                };
 
-            var userRoleModerator = new IdentityUserRole<string>
-            {
-                UserId = admin.Id,
-                RoleId = roles[1].Id
-            };
+                var userRoleModerator = new IdentityUserRole<string>
+                {
+                    UserId = admin.Id,
+                    RoleId = roles[1].Id
+                };
 
-            context.UserRoles.AddRange(new List<IdentityUserRole<string>>{userRoleAdmin, userRoleModerator});
+                context.UserRoles.AddRange(new List<IdentityUserRole<string>> { userRoleAdmin, userRoleModerator });
 
-            
-            var genres = new List<Category>
+
+                var genres = new List<Category>
             {
                 new Category
                 {
-                    Id = 1,
                     Name = "Комедія"
                 },
                 new Category
                 {
-                    Id = 2,
                     Name = "Триллер"
                 },
                 new Category
                 {
-                    Id = 3,
                     Name = "Містика"
                 },
                 new Category
                 {
-                    Id = 4,
                     Name = "Хоррор"
                 },
                 new Category
                 {
-                    Id = 5,
                     Name = "Документальний"
                 }
             };
 
-            context.Categories.AddRange(genres);
+                context.Categories.AddRange(genres);
 
-            var film = new Movie
-            {
-                Id = 1,
-                Name = "Best Movie 4",
-                Categories = new List<CategoryFilm>
+                var film1 = new Movie
+                {
+                    Name = "Best Movie 5",
+                    Director = "Quentin Tarantino",
+                    Categories = new List<CategoryFilm>
                 {
                     new CategoryFilm
                     {
-                        FilmId = 1,
                         CategoryId = 4,
                     },
                     new CategoryFilm
                     {
-                        FilmId = 1,
                         CategoryId = 1,
                     }
                 }
-            };
+                };
 
-            context.Films.Add(film);
+                var film2 = new Movie
+                {
+                    Name = "Best Movie 5",
+                    Director = "Mel Gibson",
+                    Categories = new List<CategoryFilm>
+                    {
+                        new CategoryFilm
+                        {
+                            CategoryId = 4,
+                        },
+                        new CategoryFilm
+                        {
+                            CategoryId = 1,
+                        }
+                    }
+                };
 
-            context.SaveChanges();
+                context.Films.Add(film1);
+                context.Films.Add(film2);
+
+                context.SaveChanges();
             }
         }
     }

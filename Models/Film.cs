@@ -14,6 +14,8 @@ namespace Film.Models
 
         public string Description { get; set; }
 
+        public string Director { get; set; }
+
         public byte[] Image { get; set; }
 
         public ICollection<Comment> Comments {get;set;}

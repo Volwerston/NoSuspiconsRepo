@@ -27,11 +27,11 @@ namespace Film.Controllers
         [HttpPost]
         public IActionResult Search([FromForm]SearchModel searchModel)
         {
-            return RedirectToAction("Index", new {search = searchModel.Search});
+            return RedirectToAction("Index", new {search = searchModel.Search, director=searchModel.Director});
         }
 
         [HttpGet]
-        public IActionResult Index(string search = "", bool rated = false, string[] selectedCategories = null)
+        public IActionResult Index(string search = "", string director="", bool rated = false, string[] selectedCategories = null)
         {
             var query = _applicationDbContext
             .Films
@@ -44,6 +44,11 @@ namespace Film.Controllers
             if(!string.IsNullOrEmpty(search))
             {
                 query = query.Where(c => c.Name.ToLowerInvariant() == search.ToLowerInvariant());
+            }
+
+            if (!string.IsNullOrEmpty(director))
+            {
+                query = query.Where(c => c.Director.ToLowerInvariant().Contains(director.ToLowerInvariant()));
             }
 
             if(selectedCategories != null)
